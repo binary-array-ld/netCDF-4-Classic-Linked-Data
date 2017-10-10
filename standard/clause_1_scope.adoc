@@ -1,0 +1,14 @@
+== Scope
+////
+[NOTE]
+====
+Insert Scope text here. Give the subject of the document and the aspects of that scope covered by the document.
+====
+////
+
+netCDF-LD is an approach for constructing Linked Data descriptions using the metadata and structures found in netCDF files. Linked Data is a set of practices to allow structured data to be published so that it can be interlinked on the web and support semantic queries. It uses the W3 Resource Description Framework (RDF) to express the information and relationships.
+
+netCDF-LD enhances netCDF metadata, enabling information found in netCDF files to be linked with published conventions and controlled vocabularies used to express the content.
+
+The netCDF-3 Classic linked data standard netCDF3-LD provides the encoding standard for encoding linked data semantics into netCDF-3 Classic files and interpreting netCDF-3 Classic files as RDF graphs.
+
