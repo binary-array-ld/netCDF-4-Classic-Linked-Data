@@ -1,5 +1,5 @@
 == Clauses not Containing Normative Material
-
+////
 Paragraph
 
 === Clauses not containing normative material sub-clause 1
@@ -7,3 +7,146 @@ Paragraph
 Paragraph
 
 === Clauses not containing normative material sub-clause 2
+////
+
+
+=== Resource Description Framework
+
+The Resource Description Framework (RDF) is a W3 standard (ref!!).  Information elements are statements which have three parts: Subject, Predicate, Object.
+
+Subjects and Predicates are Universal Resource Identifiers (URIs) whilst Objects may be URIs or Literals.  Where an Object is a URI, this may also be a subject for another statement.
+
+Statements are collected together within a graph.
+
+This standard maps the netCDF3-Classic encoding onto the RDF information model.
+
+
+=== Binary Array Linked Data Ontology
+
+This standard uses the Binary Array Linked Data Ontology:  (query long term URI) @prefix bald: http://binary-array-ld.net/latest
+
+This ontology is mapped onto the netCDF3-Classic model to provide RDF interpretation of netCDF3-Classic files.
+
+One netCDF3-Classic file is one bald:Container.
+
+Each variable within the netCDF3-Classic file is a bald:Subject.  Each variable which is extensive, is defined with respect to one or more dimensions declared in the file is a bald:Array (which is a bald:Subject).  The relationship between the file, the bald:Container, and each varaible, is interpreted as a statement:
+<Subject> bald:contains <Object>.
+
+
+=== Universal Resource Identifiers within netCDF files
+
+At the core of this standard is the mechanism for providing Universal Resource Identifiers (URIs) within netCDF3-Classic files.
+
+A file has an identity, each variable within that file has its own identity. This is defined relatively using the variable name together with the file identity.
+
+In order to map netCDF3-Classic to RDF all attributes are interpreted as statements.  This requires that all attribute names are interpreted as URIs and that attribute values may be interpreted as URIs.
+
+This standard provides two mechanisms to encode and interpret URIs for attribute names and attribute values.
+It is essential for attribute names, as netCDF3-Classic puts explicit textual limitations on attribute names, making encoding HTTP URIs explicitly impossible.
+It is valuable for attrribute values, as in many cases full HTTP URIs within attribute values can reduce readability and conflict with existing practices.
+
+==== Prefix Definition
+
+The prefix is the most straightforward and the most powerful part of this standard.  It has two parts: the first part is the declaration of a prefix, the second part is the use of the prefix.
+
+Prefixes are in wide use in a number of domains, including XML and RDF. They allow a URI to be expressed in a compact fashion that saves space and enhances human readability.
+
+A prefix is declared using a name/value pair that associates a short name (.e.g. ‘cf’, ‘bald’), with a URI. A single prefix declaration within CDL is an attribute and value: the attribute name is the prefix name and the attribute value is the full URI for that prefix.
+
+Prefixes are applied across the file they are declared within.  A single dedicated variable shall be used to contain all of the prefixes applied to that file by that file.
+The prefix variable is optional.
+If included the prefixes variable shall be identified within the file by a single global attribute, using the attribute name 'bald__isPrefixedBy'.
+If included, the prefixes variable shall include the prefix declaration
+bald = http://binary-array-ld.net/latest
+(note: copy to normative and reference)
+(note: is it time to adopt a more stable location, such as http://binary-array-ld.net/bald?)
+
+A prefix is used with netCDF file elements as:
+
+<prefix>__<name>
+
+where the prefix (<prefix>) is separated from the name (<name>) by a pair of underscore characters, forexamples 'nc__valid_max'.
+
+
+The double underscore is interpreted as a special character by this standard: all uses of the double underscore will be interpreted as prefixed entities and will be unpacked into full URIs by aware software.
+
+This includes partial substitution into string attribute values based on partial matching.
+
+
+
+==== Alias Definition
+
+Aliases are defined in this standard as direct substitutions, enabling an explicit string to be interpreted as one and only one URI.
+
+Aliases are applied across the file they are declared within.  A single dedicated variable shall be used to contain all of the aliases applied to that file by that file.
+The aliases variable shall be identified within the file by a single global attribute, using the attribute name 'bald__isAliasedBy'.
+(note: copy to normative and reference)
+(note: is it time to adopt a more stable location, such as http://binary-array-ld.net/bald?)
+
+
+Alias substitution within this standard shall only occur where full and exclusive matching of an alias to an entire attribute name or entire attribute value occurs.
+
+A file where an entire attribute name or entire attribute value matches multiple aliases will be treated as invalid.  Applications may raise exceptions where provided alias definitions may conflict but the file does not use potentially conflicting aliases explicitly but this is not a n invalid file, according to this standard.
+
+===== Imposing Context on Files
+(is there a strong use case for prefix context forcing, or can this be removed, and all prefixing be mandated to be in teh file?)
+
+According to this standard, external context may be applied to any file, adding aliases and prefixes to the ones defined within the file at the point where an RDF graph is interpreted from the file.
+Aliases and prefixes added as context shall be provided to applications as RDF.
+If this approach causes validation issues, this shall be interpreted as an issue with the file and contexts combined, not the file alone.
+
+Contexts may add multiple collections of aliases and prefixes to be used in interpreting the file.  Contexts that introduce clashes in alias or prefix definitions are considered invalid combinations by this standard.
+
+This mechanism enables linked data interpretation of existing files encoded to conventions that predate this standard, where those conventions can be provided in a suitable form.
+
+(note: we want to bring in entire collections here, including the CF standard names list.  can we do this in one step, as cf standard names are a skos:Collection)
+
+=== Referencing Variables
+
+Within a single file it is necessary to refer to one variable from the value of another variable, to support statement chaining within RDF, where the Object of one statement is the Subject of another statement.
+
+To facilitate this, referencing of variables by name is part of this standard.
+
+There are three types of reference: single reference, reference set and reference list.
+
+==== Single Reference
+
+Where an attribute value, an Object, exactly (completely and totally) matches the name of variable within the same file, that attribute value shall be interpreted as a reference.
+The Object in the RDF graph will be a subject, identified as the referenced variable.
+
+==== Reference Set
+
+Where an attribute value, an Object, is a space separated list of strings, every one of which exactly matches the name of a variable within the same file, that attribute value will be interpreted as an unorderd set of references.
+
+In the RDF graph this is represented as multiple individual statements, using the same Predicate, but with different Objects.
+The Object in each of these statements will be a Subject, identified as the referenced variable.
+
+
+
+==== Reference List
+
+Where an attribute value, an Object, is a comma separated list of strings, encapsulated within a pair of brackets, where every one of the strings exactly matches the name of a variable within the same file, that attribute value will be interpreted as an ordered list of variable references.
+
+In the RDF graph this is represented as one statement, using the predicate, with an Object that is a list of Subjects.
+The Object in each element of this list will be a Subject, identified as the referenced variable.
+
+==== Reference Constraints
+
+Binary array linked data provides a constraint based on compatible dimensionality and dimension mapping for referencing between variables.  This uses the bald:Reference Class and the bald:references and bald:array objectProperties.
+
+Other conventions and standards may inherit this constraint mechanism by declaring that a particular object property (attribute name) is a bald:reference within the semantic definition of that convention.
+Aware applications may then attempt to include these constraints as part of the interpretation of the file.
+
+=== Dimensions
+
+NetCDF3-Classic uses named dimensions to link together variables based on their structure.  NetCDF3-Classic idenitifes Coordinate Variables as one dimensional variables that have the same name as the dimension they are defined with respect to.
+
+This standard interprets these relationships as semantic links and adds information to the interpreted graph to represent these relationships between variables.
+
+Each coordinate variable will have its own identity within the graph, as a variable.  Each variable defined with respect to a dimension which is not itself a Coordinate Variable will be interpreted as having a bald:references relationship to the Coordiante Variable.
+These bald:references statements must fit the bald:references constraints on consistent dimensionality, due to the netCDF3-Classic dimension structuring.  They will often require a bald:shape to fully describe this relationship.
+
+
+This standard does not preserve dimension names nor assign semantic meaning to them.  This flexibility reflects the use of the core vocabularies for numerous file formats, some of which do not support this dimension sharing.  The flexibility is also useful for aggregating data sets across multiple files, where dimension sizing is preserved but dimension naming is not consistent.
+
+The consequence of this is that files created from graphs will not preserve dimension names that are not described by a Coordinate Variable.
