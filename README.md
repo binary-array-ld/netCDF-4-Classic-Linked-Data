@@ -1,4 +1,4 @@
-NetCDF-3 Classic Standard for Encoding RDF Graphs netCDF3-LD
-============================================================
+NetCDF-4 Classic Standard for Encoding RDF Graphs netCDF-4c-LD
+==============================================================
 
-This is a draft encoding standard enabling RDF graphs to be encoded in netCDF-3 Classic files, and enabling netCDF-3 Classic to be interpreted as RDF graphs.
+This is a draft encoding standard enabling RDF graphs to be encoded in netCDF-4 Classic encoded files, and enabling netCDF-4 Classic encoded files to be interpreted as RDF graphs.
