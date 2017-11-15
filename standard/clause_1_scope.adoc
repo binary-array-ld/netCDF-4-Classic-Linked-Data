@@ -10,5 +10,6 @@ netCDF-LD is an approach for constructing Linked Data descriptions using the met
 
 netCDF-LD enhances netCDF metadata, enabling information found in netCDF files to be linked with published conventions and controlled vocabularies used to express the content.
 
-The netCDF-4 Classic (netCDF-4C) linked data standard netCDF-4C-LD provides the encoding standard for encoding linked data semantics into netCDF-4 Classic files and interpreting netCDF-4 Classic files as RDF graphs.
+The netCDF Classic Linked Data standard: netCDF-Classic-LD provides the encoding standard for encoding linked data semantics into netCDF Classic files and interpreting netCDF Classic files as RDF graphs.
 
+NetCDF Classic files may use the HDF5 based netCDF-4 encoding, as long as it is limited to the netCDF classic data model, or the legacy netCDF-3 encoding.
