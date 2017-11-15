@@ -18,31 +18,31 @@ Subjects and Predicates are Universal Resource Identifiers (URIs) whilst Objects
 
 Statements are collected together within a graph.
 
-This standard maps the netCDF-4 Classic (netCDF-4C) encoding onto the RDF information model.
+This standard maps the netCDF Classic data model encoding onto the RDF information model.
 
 
 === Binary Array Linked Data Ontology
 
 This standard uses the Binary Array Linked Data Ontology:  (query long term URI) @prefix bald: http://binary-array-ld.net/latest
 
-This ontology is mapped onto the netCDF-4 Classic model to provide RDF interpretation of netCDF-4 Classic files.
+This ontology is mapped onto the netCDF Classic data model to provide RDF interpretation of netCDF Classic files.
 
-One netCDF-4C file is one bald:Container. {assertion}
+One netCDF-Classic file is one bald:Container. {assertion}
 
-Each variable within the netCDF-4C file is a bald:Subject.  Each variable which is extensive, is defined with respect to one or more dimensions declared in the file is a bald:Array (which is a bald:Subject).  The relationship between the file, the bald:Container, and each varaible, is interpreted as a statement:
+Each variable within the netCDF file is a bald:Subject.  Each variable which is extensive, is defined with respect to one or more dimensions declared in the file is a bald:Array (which is a bald:Subject).  The relationship between the file, the bald:Container, and each varaible, is interpreted as a statement:
 <Subject> bald:contains <Object>.
 
 
 === Universal Resource Identifiers within netCDF files
 
-At the core of this standard is the mechanism for providing Universal Resource Identifiers (URIs) within netCDF-4C files.
+At the core of this standard is the mechanism for providing Universal Resource Identifiers (URIs) within netCDF files.
 
 A file has an identity, each variable within that file has its own identity. This is defined relatively using the variable name together with the file identity.
 
-In order to map netCDF-4C to RDF all attributes are interpreted as statements.  This requires that all attribute names are interpreted as URIs and that attribute values may be interpreted as URIs.
+In order to map netCDF to RDF all attributes are interpreted as statements.  This requires that all attribute names are interpreted as URIs and that attribute values may be interpreted as URIs.
 
 This standard provides two mechanisms to encode and interpret URIs for attribute names and attribute values: prefix and alias.
-This is essential for attribute names, as netCDF-4C puts explicit textual limitations on attribute names, making encoding HTTP URIs explicitly impossible.
+This is essential for attribute names, as netCDF puts explicit textual limitations on attribute names, making encoding HTTP URIs explicitly impossible.
 It is valuable for attrribute values, as in many cases full HTTP URIs within attribute values can reduce readability and conflict with existing practices.
 
 ==== Prefix Definition
@@ -139,12 +139,12 @@ Aware applications may then attempt to include these constraints as part of the 
 
 === Dimensions
 
-NetCDF-4C uses named dimensions to link together variables based on their structure.  NetCDF-4C idenitifes Coordinate Variables as one dimensional variables that have the same name as the dimension they are defined with respect to.
+NetCDF uses named dimensions to link together variables based on their structure.  NetCDF idenitifes Coordinate Variables as one dimensional variables that have the same name as the dimension they are defined with respect to.
 
 This standard interprets these relationships as semantic links and adds information to the interpreted graph to represent these relationships between variables.
 
 Each coordinate variable will have its own identity within the graph, as a variable.  Each variable defined with respect to a dimension which is not itself a Coordinate Variable will be interpreted as having a bald:references relationship to the Coordiante Variable.
-These bald:references statements must fit the bald:references constraints on consistent dimensionality, due to the netCDF-4C dimension structuring.  They will often require a bald:shape to fully describe this relationship.
+These bald:references statements must fit the bald:references constraints on consistent dimensionality, due to the netCDF dimension structuring.  They will often require a bald:shape to fully describe this relationship.
 
 
 This standard does not preserve dimension names nor assign semantic meaning to them.  This flexibility reflects the use of the core vocabularies for numerous file formats, some of which do not support this dimension sharing.  The flexibility is also useful for aggregating data sets across multiple files, where dimension sizing is preserved but dimension naming is not consistent.
