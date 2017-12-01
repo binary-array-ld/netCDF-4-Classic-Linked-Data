@@ -78,6 +78,16 @@ This includes partial substitution into string attribute values based on partial
 
 Aliases are defined in this standard as direct substitutions, enabling an explicit string to be interpreted as one and only one URI.
 
+Aliases are defined by providing RDF graphs.  These graphs are interpreted to obtain context specific aliases.
+
+For an alias to be interpreted from a graph, an RDF Subject (a URI) shall declare a dct:identifier, the string used as an alias within the file.
+
+An alias will only be applied if the type of the entity matches the appropriate type as defined in the graph.
+
+For an attribute name, the only types supported are rdf:Property and owl:ObjectProperty.
+
+Once an attribute has been identified, the rdfs:range for this attibute is obtained from the alias graph.  If an alias for the value exists within the alias graph and the type of this alias subject matches the rdfs:range for the attribute name, the value alias will be used.
+
 Aliases are applied across the file they are declared within.  A single dedicated variable shall be used to contain all of the aliases applied to that file by that file.
 The aliases variable shall be identified within the file by a single global attribute, using the attribute name 'bald__isAliasedBy'.
 (note: copy to normative and reference)
@@ -86,10 +96,12 @@ The aliases variable shall be identified within the file by a single global attr
 
 Alias substitution within this standard shall only occur where full and exclusive matching of an alias to an entire attribute name or entire attribute value occurs.
 
-A file where an entire attribute name or entire attribute value matches multiple aliases will be treated as invalid.  Applications may raise exceptions where provided alias definitions may conflict but the file does not use potentially conflicting aliases explicitly but this is not a n invalid file, according to this standard.
+A file where an entire attribute name or entire attribute value matches multiple aliases will be treated as invalid.
+Applications may raise exceptions where provided alias definitions may conflict but the file does not use potentially conflicting aliases explicitly.  This is not necessarily an invalid file, according to this standard.
+
 
 ===== Imposing Context on Files
-(is there a strong use case for prefix context forcing, or can this be removed, and all prefixing be mandated to be in teh file?)
+(is there a strong use case for prefix context forcing, or can this be removed, and all prefixing be mandated to be in the file?)
 
 According to this standard, external context may be applied to any file, adding aliases and prefixes to the ones defined within the file at the point where an RDF graph is interpreted from the file.
 Aliases and prefixes added as context shall be provided to applications as RDF.
